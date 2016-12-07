@@ -1,0 +1,71 @@
+version: '2'
+services:
+    postgresql:
+      image: postgres
+      container_name: "gogs-postgresql"
+      restart: always
+      volumes:
+        - "./data/postgresql:/var/lib/postgresql"
+      environment:
+        - "POSTGRES_USER=gogs"
+        - "POSTGRES_PASSWORD=changeme"
+        - "POSTGRES_DB=gogs"
+      ports:
+        - "5432:5432"
+    gogs:
+      image: gogs/gogs
+      container_name: "gogs"
+      restart: always
+      ports:
+        - "10022:22"
+        - "10080:3000"
+      volumes:
+        - "./data/gogs:/data"
+        - "./entrypoint.sh:/entrypoint.sh"
+      links:
+        - postgresql
+      entrypoint: "/entrypoint.sh"
+
+
+
+# version: '2'
+# services:
+#     postgres:
+#       image: postgres
+#       restart: always
+#       container_name: "gogs-postgresql"
+#       environment:
+#        - "POSTGRES_USER=gogs"
+#        - "POSTGRES_PASSWORD=changeme"
+#        - "POSTGRES_DB=gogs"
+#       volumes:
+#        - "./data/postgresql:/var/lib/postgresql"
+#       networks:
+#        - gogs
+#     gogs:
+#       image: gogs/gogs:latest
+#       restart: always
+#       container_name: "gogs"
+#       ports:
+#        - "10022:22"
+#        - "10080:3000"
+#       links:
+#        - postgres
+#       environment:
+#        - "RUN_CROND=true"
+#       networks:
+#        - gogs
+#       volumes:
+#        - "./data/gogs:/data"
+#       depends_on:
+#        - postgres
+
+# networks:
+#     gogs:
+#       driver: bridge
+
+# volumes:
+#     db-data:
+#       driver: local
+#     gogs-data:
+#       driver: local

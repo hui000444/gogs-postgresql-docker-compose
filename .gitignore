@@ -1,0 +1,4 @@
+/data/gogs/*
+!/data/gogs/.gitkeep
+/data/postgresql/*
+!/data/postgresql/.gitkeep
